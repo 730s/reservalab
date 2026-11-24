@@ -22,6 +22,9 @@ public class SecurityConfig {
             .csrf(c -> c.disable()) // API stateless com token em cabeçalho (sem cookies de sessão)
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(a -> a
+                // "/error" liberado: senão um 403/404/500 é reencaminhado para /error sem o token e vira 401,
+                // e o frontend entende como sessão expirada (desconecta sem mostrar o erro real).
+                .requestMatchers("/error").permitAll()
                 .requestMatchers("/api/auth/login", "/api/health",
                     "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .anyRequest().authenticated())

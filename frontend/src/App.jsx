@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, NavLink, Route, Routes } from 'react-router-dom';
+import { Navigate, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { useAuth } from './auth.jsx';
 import { PERFIL } from './ui.jsx';
 import Login from './pages/Login.jsx';
@@ -28,10 +28,19 @@ const MENU = {
 
 const iniciais = (nome) => String(nome || '?').trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join('').toUpperCase();
 
+// A rota atual faz parte do menu do perfil? (a edição de reserva vale para quem tem "/reservas")
+function rotaPermitida(menu, caminho) {
+  return menu.some(([to]) => caminho === to || (to === '/reservas' && /^\/reservas\/\d+\/editar$/.test(caminho)));
+}
+
 export default function App() {
   const { user, logout } = useAuth();
+  const { pathname } = useLocation();
   if (!user) return <Login />;
   const menu = MENU[user.perfil] || [];
+  // Ao trocar de usuário na mesma aba, o endereço antigo pode ser de uma página que este perfil não acessa:
+  // nesse caso vai para a primeira página do menu, em vez de chamar a API e receber "sem permissão".
+  if (menu.length > 0 && !rotaPermitida(menu, pathname)) return <Navigate to={menu[0][0]} replace />;
   return (
     <div className="shell">
       <aside className="lateral">
