@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: reservalab
+      POSTGRES_USER: reservalab
+      POSTGRES_PASSWORD: reservalab
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reservalab -d reservalab"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025"   # caixa de entrada de teste (e-mails do sistema)
+
+  backend:
+    build: ./backend
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/reservalab
+      DB_USER: reservalab
+      DB_PASSWORD: reservalab
+      MAIL_HOST: mailpit
+      MAIL_PORT: 1025
+      JWT_SECRET: troque-este-segredo-em-producao-com-pelo-menos-32-caracteres
+      SEED_DEMO: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"   # API + Swagger em /swagger-ui.html
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  dbdata:

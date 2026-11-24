@@ -1,0 +1,21 @@
+{
+  // Ambiente para rodar o ReservaLab inteiro no GitHub Codespaces.
+  // Ao abrir o Codespace, o docker compose sobe sozinho (banco, backend, frontend e Mailpit).
+  "name": "ReservaLab",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "8gb"
+  },
+  "forwardPorts": [3000, 8025, 8080],
+  "portsAttributes": {
+    "3000": { "label": "ReservaLab (aplicação)", "onAutoForward": "openBrowser" },
+    "8025": { "label": "Mailpit (e-mails de teste)", "onAutoForward": "silent" },
+    "8080": { "label": "API + Swagger", "onAutoForward": "silent" }
+  },
+  // Roda a cada vez que o Codespace liga (inclusive na primeira vez).
+  "postStartCommand": "bash .devcontainer/iniciar.sh"
+}

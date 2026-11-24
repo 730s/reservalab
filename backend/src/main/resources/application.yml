@@ -1,0 +1,47 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: reservalab
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/reservalab}
+    username: ${DB_USER:reservalab}
+    password: ${DB_PASSWORD:reservalab}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate.jdbc.time_zone: UTC
+  flyway:
+    enabled: true
+  mail:
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:1025}
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+reservalab:
+  seed-demo: ${SEED_DEMO:true}
+  jwt:
+    secret: ${JWT_SECRET:dev-only-secret-change-me-dev-only-secret-change-me}
+    ttl-minutes: 30            # RNF14: sessão expira em 30 min de inatividade
+  # Parâmetros das regras de negócio (Quadro 12 / D12). Todos configuráveis.
+  parametros:
+    antecedencia-com-preparo-dias-uteis: 3        # P01
+    antecedencia-sem-preparo-horas: 2             # P02
+    antecedencia-software-terceiros-dias-uteis: 5 # P03
+    antecedencia-ordem-preparo-dias-uteis: 2      # P04
+    lembrete-professor-horas: 24                  # P05
+    prazo-analise-dias-uteis: 1                   # P06
+    prazo-validacao-ti-dias-uteis: 2              # P07
+    prazo-urgencia-horas-uteis: 4                 # P08
+    limite-cancelamento-tardio-horas: 24          # P09
+    notificacao-alunos-minutos: 5                 # P11
+    retencao-anos: 5                              # P12
+    tentativas-login: 5                           # P13
+    bloqueio-login-minutos: 15                    # P13
+    duracao-minima-minutos: 50                    # Q04 (bloco-aula)
+    justificativa-urgencia-min-caracteres: 20     # RN08
