@@ -26,6 +26,8 @@ const MENU = {
   DIRECAO: [['/relatorios', 'Ocupação e ociosidade']],
 };
 
+const iniciais = (nome) => String(nome || '?').trim().split(/\s+/).slice(0, 2).map((p) => p[0]).join('').toUpperCase();
+
 export default function App() {
   const { user, logout } = useAuth();
   if (!user) return <Login />;
@@ -38,6 +40,7 @@ export default function App() {
           {menu.map(([to, nome]) => <NavLink key={to} to={to} end>{nome}</NavLink>)}
         </nav>
         <div className="usuario">
+          <span className="avatar" aria-hidden="true">{iniciais(user.nome)}</span>
           <div><b>{user.nome}</b>{PERFIL[user.perfil]}</div>
           <button className="btn sec peq" onClick={logout}>Sair</button>
         </div>

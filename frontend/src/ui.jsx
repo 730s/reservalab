@@ -67,7 +67,7 @@ export function Pagina({ titulo, sub, acoes, children }) {
     <section className="pagina">
       <header className="pagina-topo">
         <div>
-          <h1>{titulo}</h1>
+          <h1><span className="marcado">{titulo}</span></h1>
           {sub && <p className="sub">{sub}</p>}
         </div>
         {acoes && <div className="acoes-topo">{acoes}</div>}
