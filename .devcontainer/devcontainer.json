@@ -2,7 +2,8 @@
   // Ambiente para rodar o ReservaLab inteiro no GitHub Codespaces.
   // Ao abrir o Codespace, o docker compose sobe sozinho (banco, backend, frontend e Mailpit).
   "name": "ReservaLab",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  // Ubuntu 24.04 fixo: a tag "ubuntu" aponta para uma versão em que o docker-in-docker não instala.
+  "image": "mcr.microsoft.com/devcontainers/base:noble",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
